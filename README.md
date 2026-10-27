@@ -18,3 +18,7 @@ resale restriction is applied to these third-party ports.
 See [BUILD.txt](BUILD.txt) for reproduction details.
 
 Provenance: 5f8fb31c95d33c5ff1b2672f02efeaf9805c3ea4
+
+Original Machinista patch banks (32 CC0 patches) are in [presets](presets/README.md).
+Download `Machinista-OBXd-Patches.zip` from Releases and import the four JSON files
+through WebUI > Patch banks, selecting OB-Xd. The plug-in itself remains GPL.
