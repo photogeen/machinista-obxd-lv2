@@ -1,0 +1,50 @@
+OB-Xd (2DaT LV2) — ARM64 Linux headless port for Machinista
+Build date: 2026-10-14
+
+Requested upstream: https://github.com/2DaT/Obxd
+Exact revision: 5f8fb31c95d33c5ff1b2672f02efeaf9805c3ea4
+
+This is an independently added native LV2 adapter for the old upstream synth,
+not an official OB-Xd release. Original DSP headers and original parameter
+switch are used. The source repository only supplied a legacy JUCE project.
+The desktop graphical editor, original JUCE host wrapper, MIDI Learn/Unlearn,
+128-program XML bank manager, and original desktop preset formats are not
+included in this headless adapter. There are no external factory sound banks.
+The original initial sound is the default. All 77 sound parameters are LV2
+control inputs; Machinista saves these in its project. Note on/off, velocity,
+pitch bend, mod wheel, sustain, all-notes-off, all-sound-off and host tempo/LFO
+sync use a timestamped LV2 Atom input. Stereo output, up to eight voices.
+
+Changes to engine copy: replace the PluginProcessor.h include in SynthEngine.h
+with compat.hpp. The compatibility header supplies numeric helpers, constants,
+string alias and a small independent pseudorandom generator for noise/analog
+variation; its random sequence differs from the original JUCE generator.
+The adapter zero-initializes legacy engine storage before construction and
+applies every upstream sound parameter before audio runs. No DSP algorithms
+were rewritten. See prepare.py, port/obxd_lv2.cpp, port/compat.hpp and params.inc.
+
+Build target: ARM64 (AArch64, cortex-a53 / ARMv8), Raspberry Pi 4 and 5 with a
+compatible 64-bit Debian/Raspberry Pi OS runtime. Built natively on the current
+Pi using its system C++ compiler. This is not a macOS/Windows/x86 binary.
+Dependencies: standard Linux C/C++ runtime and libm only; no JUCE runtime.
+
+Reproduce from the companion source archive on ARM64 Linux:
+  python3 prepare.py    # generate engine adapter inputs from source/
+  sh port/build.sh     # requires c++, binutils, LV2 development headers
+Result: port/obxd.lv2/obxd.so
+To run the included integration check (requires Machinista source and Lilv):
+  c++ -std=c++20 -O2 -pthread -I/path/to/Machinista/src render_check.cpp \
+      -o render_check $(pkg-config --cflags --libs lilv-0)
+  mkdir -p bundles
+  cp -a port/obxd.lv2 bundles/
+  LV2_PATH="$PWD/bundles" ./render_check
+
+Install: WebUI > LV2 Plugins > Upload & check > obxd-linux-arm64.zip
+Then choose OB-Xd (2DaT LV2) in the first plug-in slot of a Sound.
+The native desktop editor is not included; use controller parameters.
+This build is delivered for manual installation, not preinstalled.
+
+Licensing: upstream license.txt is included unchanged as COPYING.GPL-3.
+Original per-file copyright and license notices are preserved in source/ and
+port/Engine/. The new adapter is GPL-3.0-or-later. Corresponding source plus
+build scripts accompany this binary as obxd-linux-arm64-sources.tar.gz.
