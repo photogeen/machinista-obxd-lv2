@@ -13,5 +13,7 @@ Revision 2: Oberheim-style brass, PWM strings, comping keys, punch basses,
 hard-sync and unison leads. Independently programmed using the legacy DSP
 parameter curves, not imported factory-program copies. Validated at 44.1/48 kHz
 with single notes and eight-note chords: 64 renders, no clipping or stuck tails.
-Reimport these four banks to replace the previous Machinista version; saved
-project sounds keep their own parameter values until a patch is loaded again.
+Imports have content-based identities. If you installed the previous Machinista
+banks, remove those four old banks in WebUI > Patch banks before importing v2,
+otherwise both revisions may appear. Keep unrelated banks. Saved project sounds
+keep their own parameter values until a patch is loaded again.
